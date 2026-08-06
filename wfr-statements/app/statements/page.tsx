@@ -4,6 +4,7 @@ import { requireContractorId } from '@/lib/auth/requireContractor'
 import { BrandHeader } from '@/components/BrandHeader'
 import { ContractorDetails } from '@/components/ContractorDetails'
 import { ToolDisclaimer } from '@/components/ToolDisclaimer'
+import { SignOutButton } from '@/components/SignOutButton'
 
 /**
  * This screen reads live Airtable data that must be fresh per request, and the
@@ -61,6 +62,8 @@ export default async function StatementsPage() {
         >
           View my previous submissions
         </Link>
+
+        <SignOutButton />
       </nav>
 
       <p className="text-center text-xs" style={{ color: 'var(--wfr-text-muted)' }}>
