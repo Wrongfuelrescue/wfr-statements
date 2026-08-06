@@ -39,7 +39,21 @@ export default async function SubmissionsPage() {
                 </p>
               </div>
               <div className="mt-2 flex items-center justify-between gap-3 text-xs">
-                {s.reference ? (
+                {/*
+                  The contractor's own invoice number, matching what is
+                  printed on the PDF — the screen and the document must not
+                  name the same statement two different ways. The app's
+                  internal INV- reference is still on the Airtable record and
+                  in the PDF's filename, which is how WFR traces a document
+                  back to its row; it just isn't what a contractor is asked to
+                  recognise. Rows submitted before the number was collected
+                  fall back to the reference rather than showing nothing.
+                */}
+                {s.contractorInvoiceNumber ? (
+                  <p style={{ color: 'var(--wfr-text-muted)' }}>
+                    Invoice no. {s.contractorInvoiceNumber}
+                  </p>
+                ) : s.reference ? (
                   <p style={{ color: 'var(--wfr-text-muted)' }}>Ref: {s.reference}</p>
                 ) : null}
                 {/*
