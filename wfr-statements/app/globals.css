@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --wfr-primary: #98d02f;
+  --wfr-accent: #3f6b0d;
+  --wfr-text: #1a1a1a;
+  --wfr-text-muted: #474747;
+  --wfr-surface: #f5f6f7;
+  --wfr-error: #d32f2f;
+  --wfr-error-bg: #fdeaea;
+  --wfr-warning: #c77700;
+  --wfr-warning-bg: #fdf3dd;
+  --wfr-success: #2e6b1f;
+  --wfr-success-bg: #e8f5e0;
+}
+
+body {
+  background: var(--wfr-surface);
+  color: var(--wfr-text);
+  -webkit-text-size-adjust: 100%;
+}
