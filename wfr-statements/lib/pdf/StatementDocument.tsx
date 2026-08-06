@@ -21,9 +21,8 @@ export type StatementMeta = {
   submittedAt: string
   /**
    * The number the contractor chose. Theirs, from their own sequence.
-   * Deliberately not printed on the invoice (see `metaRows`) — it is carried
-   * here so it reaches the Airtable record, which is where WFR reconciles
-   * against it.
+   * Printed on the invoice (see `metaRows`) and also written to the Airtable
+   * record, which is where WFR reconciles against it.
    */
   contractorInvoiceNumber: string
   /**
@@ -84,19 +83,27 @@ function money(n: number): string {
  * out; it cannot prove the right identifier is printed against the right
  * label.
  *
- * Neither identifier is printed here, at the client's request: not the
- * contractor's own invoice number, and not the app's internal reference. Both
- * are still collected and stored on the Airtable record, and the reference is
- * still in the PDF's filename and on the contractor's submissions list, so a
- * document can still be traced — just not from the face of the page alone.
- * An invoice number is not among the ATO's required elements of a valid tax
- * invoice, so omitting both does not affect the document's validity.
+ * The contractor's own invoice number IS printed, from their own sequence.
+ * It was omitted for a period at the client's request and restored on
+ * 2026-08-07 at WFR's request, because accounts reconcile against a number on
+ * the face of the page.
  *
- * If either is ever restored, restore it here and nowhere else; the values
- * are already carried on `meta`.
+ * The app's internal `INV-` reference is still NOT printed. It remains in the
+ * PDF's filename, on the contractor's submissions list and in the Airtable
+ * record's `Reference` field, which is how a document is traced back to its
+ * row. Note the two are not interchangeable: a contractor's number is theirs
+ * and two contractors could both submit "INV-001", so only the reference
+ * identifies a statement unambiguously.
+ *
+ * An invoice number is not among the ATO's required elements of a valid tax
+ * invoice, so the document was valid without it too.
  */
 export function metaRows(meta: StatementMeta): Array<{ label: string; value: string }> {
   return [
+    {
+      label: 'Invoice no.',
+      value: meta.contractorInvoiceNumber,
+    },
     {
       label: 'Date',
       value: formatDisplayDateWithYear(perthDateFromInstant(meta.submittedAt)),
