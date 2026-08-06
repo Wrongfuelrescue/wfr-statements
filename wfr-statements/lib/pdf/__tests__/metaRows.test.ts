@@ -19,22 +19,20 @@ function valueFor(label: string): string | undefined {
 }
 
 describe('metaRows', () => {
-  it('prints neither identifier — not the contractor’s number, not the internal reference', () => {
-    // Both removed at the client's request. Both are still collected and
-    // stored on the Airtable record; these assertions pin only that they stay
-    // off the printed page, so restoring either is a deliberate decision
-    // rather than an accident.
-    const values = metaRows(meta).map((row) => row.value)
-    expect(values).not.toContain(meta.contractorInvoiceNumber)
-    expect(values).not.toContain(meta.reference)
+  it('prints the contractor’s own invoice number, not the internal reference', () => {
+    // The contractor's number was restored to the page at WFR's request; the
+    // internal reference stays off it. The two are not interchangeable — only
+    // the reference is unique across contractors — so printing the reference
+    // under an "Invoice no." label would be actively misleading.
+    expect(valueFor('Invoice no.')).toBe(meta.contractorInvoiceNumber)
 
-    const labels = metaRows(meta).map((row) => row.label)
-    expect(labels).not.toContain('Invoice no.')
-    expect(labels).not.toContain('Reference')
+    const values = metaRows(meta).map((row) => row.value)
+    expect(values).not.toContain(meta.reference)
+    expect(metaRows(meta).map((row) => row.label)).not.toContain('Reference')
   })
 
-  it('prints the date and period, and nothing else', () => {
-    expect(metaRows(meta).map((row) => row.label)).toEqual(['Date', 'Period'])
+  it('prints the invoice number, date and period, and nothing else', () => {
+    expect(metaRows(meta).map((row) => row.label)).toEqual(['Invoice no.', 'Date', 'Period'])
   })
 
   it('prints the submitted date in Perth time and the claimed period', () => {
