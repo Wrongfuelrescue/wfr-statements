@@ -1,3 +1,4 @@
+
 import 'server-only'
 import type { StatementTotals } from '@/lib/calc/types'
 import type { RateCard } from '@/lib/rates/types'
@@ -248,6 +249,13 @@ export async function listStatementsForContractor(contractorId: string): Promise
     submittedAt: string
     reference: string
     /**
+     * The contractor's own invoice number, as printed on the PDF. Shown on
+     * "My submissions" so the screen and the document agree on how a
+     * statement is named. Empty on rows submitted before the number was
+     * collected, which is why the page falls back to `reference`.
+     */
+    contractorInvoiceNumber: string
+    /**
      * The stored PDF's download URL, or `null` when the attachment is
      * missing — the statement is still Status="Submitted" (see
      * createStatement: Status is set before the PDF attach is attempted in
@@ -290,6 +298,7 @@ export async function listStatementsForContractor(contractorId: string): Promise
         total: Number(r.fields.Total ?? 0),
         submittedAt: String(r.fields['Submitted At'] ?? ''),
         reference: String(r.fields.Reference ?? ''),
+        contractorInvoiceNumber: String(r.fields['Contractor Invoice Number'] ?? ''),
         pdfUrl,
       }
     })
